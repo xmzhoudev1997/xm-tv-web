@@ -8,7 +8,8 @@ export default (
   const [list, setList] = useState<PERFORM_CLASS[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const performId = Number(searchParams.get('performId')) || 0;
-  const handlePerformChange = (key: string) => {
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const handlePerformChange = (key: number) => {
     searchParams.set('performId', key);
     setSearchParams(searchParams, { replace: true })
   }
@@ -22,6 +23,7 @@ export default (
       .then((d) => {
         Toast.clear();
         setList(d);
+        setOpenKeys(d.map(d => d.name));
       })
       .catch((err) => {
         Toast.show({
@@ -38,5 +40,7 @@ export default (
     performList: list,
     performId,
     handlePerformChange,
+    openKeys,
+    handleOpenKeyChange: setOpenKeys,
   }
 }

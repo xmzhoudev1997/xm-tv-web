@@ -195,7 +195,8 @@ export default () => {
     })
   }
   const handleOkAction = () => {
-    form.setFieldValue('source', dialog.checked.join('\n'));
+    const value = form.getFieldValue('source');
+    form.setFieldValue('source', `${value}\n${dialog.checked.join('\n')}`);
     setDialog({
       visible: false,
       list: [],

@@ -2,36 +2,40 @@ import { FC } from 'react';
 import useData from './hook';
 import styles from './index.less';
 import PerformVideo from '@/conponents/perform-video';
-import { CapsuleTabs } from 'antd-mobile';
+import { Collapse, Grid } from 'antd-mobile';
+import classNames from 'classnames';
 
 const Index: FC = () => {
     const {
-        performList, performId,
-        handlePerformChange,
+        performList, performId, openKeys,
+        handlePerformChange, handleOpenKeyChange,
     } = useData();
     return (
         <div className={styles.root}>
             <PerformVideo className={styles.video} performId={performId} />
-            <div className={styles.scroll}>
-            {
-                performList.map((cla) => {
-                    return (
-                        <div className={styles.block}>
-                            <div className={styles.title}>{cla.name}</div>
-                            <CapsuleTabs activeKey={String(performId)} onChange={handlePerformChange}>
-                                {
-                                    cla.children.map(d => {
-                                        return (
-                                            <CapsuleTabs.Tab title={d.name} key={String(d.id)}/>
-                                        );
-                                    })
-                                }
-                            </CapsuleTabs>
-                        </div>
-                    );
-                })
-            }
-            </div>
+
+            <Collapse activeKey={openKeys} onChange={handleOpenKeyChange}>
+                {
+                    performList.map((cla) => {
+                        return (
+                            <Collapse.Panel key={cla.name} title={cla.name}>
+                                <Grid columns={3} gap={24}>
+                                    {
+                                        cla.children.map(d => {
+                                            return (
+                                                <Grid.Item key={String(d.id)} className={classNames(styles.item, performId === d.id ? styles.active : null)} onClick={() => handlePerformChange(d.id)}>
+                                                    <div>{d.name}</div>
+                                                </Grid.Item>
+                                            );
+                                        })
+                                    }
+
+                                </Grid>
+                            </Collapse.Panel>
+                        );
+                    })
+                }
+            </Collapse>
         </div>
     );
 }

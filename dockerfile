@@ -1,20 +1,16 @@
-# 使用 Node.js 官方提供的 Node 镜像作为基础镜像
-FROM node:latest
+# 使用 Nginx 作为基础镜像
+FROM nginx
 
-# 设置工作目录
-WORKDIR /app
+RUN rm /etc/nginx/conf.d/default.conf
 
-# 将 package.json 和 package-lock.json 复制到工作目录
-COPY package*.json ./
+# 删除默认配置文件
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# 安装项目依赖
-RUN npm install
+# 将构建产物复制到 Nginx 的默认 HTML 目录
+COPY dist /usr/share/nginx/html
 
-# 将应用程序源代码复制到工作目录
-COPY . .
+# 暴露 Nginx 默认端口
+EXPOSE 80
 
-# 暴露 Nest.js 应用程序运行的端口
-EXPOSE 3000
-
-# 运行 Nest.js 应用程序
-RUN nx build server
+# 启动 Nginx 服务
+CMD ["nginx", "-g", "daemon off;"]

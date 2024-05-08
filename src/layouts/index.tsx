@@ -3,7 +3,8 @@ import { Outlet } from 'umi';
 import styles from './index.less';
 import Logo from '@/assets/logo.png';
 import useData from './hook';
-import { NavBar, TabBar } from 'antd-mobile'
+import { NavBar, TabBar } from 'antd-mobile';
+import 'antd-mobile/es/global/global.css'
 
 const Menus = [
   {
